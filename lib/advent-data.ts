@@ -98,14 +98,14 @@ const generateChristmasConspiracyData = (): DayContent[] => {
   return Array.from({ length: 24 }, (_, i) => {
     const day = i + 1
 
-    // Day 1 uses the Manor Cipher game
+    // Day 1 uses the Cipher of Carols game
     if (day === 1) {
       return {
         day,
-        title: `Day ${day}: The Manor Cipher`,
-        storyText: `Decode the cryptic message to discover the location of the Christmas treasure!`,
+        title: `Day ${day}: Cipher of Carols`,
+        storyText: `Decode the Christmas carols! Famous carol lines have key words swapped. Can you guess the real title?`,
         illustrationUrl: `/placeholder.svg?height=400&width=600&query=Christmas conspiracy illustration day ${day}`, // Fallback if iframe doesn't load
-        interactiveUrl: `/games/manor-cipher.html`, // Interactive cipher game for day 1
+        interactiveUrl: `/games/cipher-of-carols.html`, // Interactive carol cipher game for day 1
         clueCardUrl: `/placeholder.svg?height=300&width=400&query=conspiracy clue card day ${day}`,
         doorImageUrl: `/images/christmas_conspiracy_advent_doors/${day}.svg`,
       }
@@ -267,14 +267,14 @@ const generateChristmasConspiracyData = (): DayContent[] => {
       }
     }
 
-    // Day 14 uses the Cipher of Carols game
+    // Day 14 uses the Manor Cipher game
     if (day === 14) {
       return {
         day,
-        title: `Day ${day}: Cipher of Carols`,
-        storyText: `Decode the Christmas carols! Famous carol lines have key words swapped. Can you guess the real title?`,
+        title: `Day ${day}: The Manor Cipher`,
+        storyText: `Decode the cryptic message to discover the location of the Christmas treasure!`,
         illustrationUrl: `/placeholder.svg?height=400&width=600&query=Christmas conspiracy illustration day ${day}`, // Fallback if iframe doesn't load
-        interactiveUrl: `/games/cipher-of-carols.html`, // Interactive carol cipher game for day 14
+        interactiveUrl: `/games/manor-cipher.html`, // Interactive cipher game for day 14
         clueCardUrl: `/placeholder.svg?height=300&width=400&query=conspiracy clue card day ${day}`,
         doorImageUrl: `/images/christmas_conspiracy_advent_doors/${day}.svg`,
       }

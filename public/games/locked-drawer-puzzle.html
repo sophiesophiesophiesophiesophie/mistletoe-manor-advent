@@ -105,7 +105,7 @@
    <main class="puzzle-container">
     <div class="drawer-frame">
      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem;">
-      <p style="font-size: 1rem; line-height: 1.6; color: #cbd5e1; text-align: center;" id="clueText">"When midnight's bell tolls thrice, add the letters in 'RAVEN', multiply by the sides of fortune's wheel, then subtract the baker's dozen. What number opens the ancient seal?"</p>
+      <p style="font-size: 1rem; line-height: 1.6; color: #cbd5e1; text-align: center;" id="clueText">"When midnight's bell tolls thrice, add the letters in 'RAVEN', multiply by how many sides a wheel has, then add the baker's dozen, and multiply by sixty. What number opens the ancient seal?"</p>
      </div>
      <div class="lock-mechanism">
       <div class="code-input" id="codeInputs">
@@ -125,16 +125,12 @@
         // Default configuration
         const defaultConfig = {
             drawer_title: "The Cryptkeeper's Vault",
-            clue_text: "When midnight's bell tolls thrice, add the letters in 'RAVEN', multiply by the sides of fortune's wheel, then subtract the baker's dozen. What number opens the ancient seal?"
+            clue_text: "When midnight's bell tolls thrice, add the letters in 'RAVEN', multiply by how many sides a wheel has, then add the baker's dozen, and multiply by sixty. What number opens the ancient seal?"
         };
 
-        // Puzzle solution: 3 + 5 = 8, 8 * 8 = 64, 64 - 13 = 51, 51 * 25 = 1275
-        // Actually, let's simplify: midnight tolls 3 times (3), RAVEN has 5 letters (5), fortune's wheel has 8 sides (8), baker's dozen is 13, Christmas Day is 25
-        // If the clue says "multiply by the sides of fortune's wheel" after adding, then: (3 + 5) * 8 = 64, 64 - 13 = 51
-        // But wait, the solution code is "1275" according to the original. Let me check the logic:
-        // The hint says: 3 + 5 = 8, 8 * 8 = 64, 64 - 13 = 51, 51 * 25 = 1275
-        // So: midnight (3) + RAVEN letters (5) = 8, * fortune's wheel sides (8) = 64, - baker's dozen (13) = 51, * Christmas Day (25) = 1275
-        const correctCode = "1275";
+        // Puzzle solution: midnight tolls 3 times (3), RAVEN has 5 letters (5), a wheel has 1 side (1), baker's dozen is 13, multiply by 60
+        // Calculation: (3 + 5) * 1 = 8, then 8 + 13 = 21, then 21 * 60 = 1260
+        const correctCode = "1260";
         let attempts = 0;
         let isUnlocked = false;
 
@@ -211,7 +207,7 @@
                 inputs.forEach(input => input.classList.add('incorrect'));
                 
                 if (attempts >= 3) {
-                    statusMessage.textContent = 'Hint: Think step by step! Midnight tolls 3 times, RAVEN has 5 letters, fortune\'s wheel has 8 sides, baker\'s dozen is 13, and Christmas Day is the 25th!';
+                    statusMessage.textContent = 'Hint: Think step by step! Midnight tolls 3 times, RAVEN has 5 letters, a wheel has 1 side, baker\'s dozen is 13, then multiply by 60!';
                     statusMessage.className = 'status-message hint';
                 } else {
                     statusMessage.textContent = 'The vault remains locked. Study the clue more carefully...';

@@ -120,8 +120,9 @@
     </div>
 
     <div class="feedback" id="hintMessage"></div>
+    <div class="feedback" id="clickFeedback"></div>
 
-    <div class="feedback success" id="successMessage" style="display: none; margin-top: 1.5rem;">
+    <div class="feedback success" id="successMessage" style="margin-top: 1.5rem; opacity: 0; transform: translateY(10px);">
      🎄 Congratulations! You found all the differences! 🎄
     </div>
    </main>
@@ -281,9 +282,17 @@
                         markDifferenceAtPosition(containerId, diff, index, clickX, clickY);
                         updateProgress();
                         foundAny = true;
+                        
+                        // Show success feedback
+                        showClickFeedback('✓ Correct! Great find!', 'success');
                     }
                 }
             });
+            
+            // If no difference was found, show error feedback
+            if (!foundAny) {
+                showClickFeedback('✗ Not quite! Try clicking elsewhere.', 'error');
+            }
         }
         
         // Handle calibration click
@@ -665,6 +674,20 @@
             });
         }
 
+        // Show click feedback
+        function showClickFeedback(message, type) {
+            const feedback = document.getElementById('clickFeedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${type} show`;
+            
+            // Auto-hide after 2 seconds
+            setTimeout(() => {
+                feedback.classList.remove('show');
+                feedback.textContent = '';
+                feedback.className = 'feedback';
+            }, 2000);
+        }
+
         // Update progress
         function updateProgress() {
             const total = gameConfig.differences.length;
@@ -675,7 +698,10 @@
             document.getElementById('progressFill').style.width = percentage + '%';
             
             if (found === total && total > 0) {
-                document.getElementById('successMessage').classList.add('show');
+                const successMsg = document.getElementById('successMessage');
+                successMsg.classList.add('show');
+                successMsg.style.opacity = '1';
+                successMsg.style.transform = 'translateY(0)';
             }
         }
 

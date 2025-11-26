@@ -194,8 +194,10 @@
             document.getElementById('riddleNumber').textContent = `Riddle ${currentRiddle + 1} of ${riddles.length}`;
             document.getElementById('riddleText').textContent = riddle.text;
             document.getElementById('answerInput').value = '';
-            document.getElementById('feedback').textContent = '';
-            document.getElementById('feedback').className = 'feedback';
+            const feedbackElement = document.getElementById('feedback');
+            feedbackElement.textContent = '';
+            feedbackElement.classList.remove('show', 'success', 'error');
+            feedbackElement.className = 'feedback';
             
             // Reset hint display
             const hintDisplay = document.getElementById('hintDisplay');
@@ -230,8 +232,8 @@
             const feedback = document.getElementById('feedback');
             
             if (userAnswer === correctAnswer) {
-                feedback.textContent = '🎄 Correct! Well done, detective! 🎄';
-                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Correct! Well done, detective!';
+                feedback.className = 'feedback success show';
                 solvedRiddles.add(currentRiddle);
                 updateProgress();
                 
@@ -248,8 +250,8 @@
                     }, 2000);
                 }
             } else {
-                feedback.textContent = '🔍 Try again! The answer lies within the manor\'s walls...';
-                feedback.className = 'feedback incorrect';
+                feedback.textContent = '✗ Wrong! Try again!';
+                feedback.className = 'feedback error show';
             }
         }
 

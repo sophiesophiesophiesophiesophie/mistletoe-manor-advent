@@ -72,6 +72,28 @@
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
+        .hint {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            color: #cbd5e1;
+            font-style: italic;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .hint.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         @media (max-width: 768px) {
             .progress {
                 flex-direction: column;
@@ -215,7 +237,12 @@
             badge.className = `difficulty-badge difficulty-${currentWord.difficulty}`;
             
             document.getElementById('answer-input').value = '';
-            document.getElementById('feedback').textContent = '';
+            const feedbackElement = document.getElementById('feedback');
+            feedbackElement.textContent = '';
+            feedbackElement.classList.remove('show', 'success', 'error');
+            // Hide hint when displaying new word
+            const hintElement = document.getElementById('hint');
+            hintElement.classList.remove('show');
             hintShown = false;
         }
 
@@ -239,23 +266,21 @@
                 score += points;
                 
                 document.getElementById('score').textContent = `Score: ${score}`;
-                feedback.textContent = `${config.success_message || defaultConfig.success_message} (+${points} points)`;
-                feedback.className = 'feedback success';
+                feedback.textContent = `✓ Correct! (+${points} points)`;
+                feedback.className = 'feedback success show';
                 
                 setTimeout(() => {
                     nextWord();
                 }, 1500);
             } else {
-                feedback.textContent = 'Not quite right. Try again!';
-                feedback.className = 'feedback error';
+                feedback.textContent = '✗ Wrong! Try again!';
+                feedback.className = 'feedback error show';
             }
         }
 
         function showHint() {
-            const currentWord = words[currentWordIndex];
-            const hint = `Hint: The word starts with "${currentWord.word[0]}" and has ${currentWord.word.length} letters`;
-            document.getElementById('feedback').textContent = hint;
-            document.getElementById('feedback').className = 'feedback';
+            const hintElement = document.getElementById('hint');
+            hintElement.classList.add('show');
             hintShown = true;
         }
 

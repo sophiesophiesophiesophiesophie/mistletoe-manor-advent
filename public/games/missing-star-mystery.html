@@ -408,8 +408,8 @@
       </div>
       <div class="input-group">
        <input type="text" class="solution-input puzzle-input" placeholder="Enter reindeer name" data-answer="CUPID" autocomplete="off">
-       <button class="submit-button submit-btn" onclick="checkAnswer(1)">Submit Answer</button>
-       <button class="hint-btn" onclick="toggleHint(1)">Show Hint</button>
+       <button class="submit-button submit-btn" data-puzzle-num="1">Submit Answer</button>
+       <button class="hint-btn" data-hint-id="1">Show Hint</button>
        <div class="hint-text" id="hint1">Start from fixed points: Rudolph (5), Donner (7), Blitzen (9), then fill others around them.</div>
        <div class="feedback" id="feedback1"></div>
       </div>
@@ -431,8 +431,8 @@
       </div>
       <div class="input-group">
        <input type="text" class="solution-input puzzle-input" placeholder="Enter 4-digit code" data-answer="4336" autocomplete="off">
-       <button class="submit-button submit-btn" onclick="checkAnswer(2)">Submit Answer</button>
-       <button class="hint-btn" onclick="toggleHint(2)">Show Hint</button>
+       <button class="submit-button submit-btn" data-puzzle-num="2">Submit Answer</button>
+       <button class="hint-btn" data-hint-id="2">Show Hint</button>
        <div class="hint-text" id="hint2">31÷8 ≈ 3.875 → round up = 4. Reindeer = 9÷3=3, CHRISTMAS has 9 letters → 9-6=3, snowflake = 6 sides.</div>
        <div class="feedback" id="feedback2"></div>
       </div>
@@ -455,8 +455,8 @@
       </div>
       <div class="input-group">
        <input type="text" class="solution-input puzzle-input" placeholder="Enter colour name" data-answer="YELLOW" autocomplete="off">
-       <button class="submit-button submit-btn" onclick="checkAnswer(3)">Submit Answer</button>
-       <button class="hint-btn" onclick="toggleHint(3)">Show Hint</button>
+       <button class="submit-button submit-btn" data-puzzle-num="3">Submit Answer</button>
+       <button class="hint-btn" data-hint-id="3">Show Hint</button>
        <div class="hint-text" id="hint3">If 4th is RED, then 3rd must be GREEN. BLUE is 2nd, and YELLOW comes before BLUE → 1st = YELLOW.</div>
        <div class="feedback" id="feedback3"></div>
       </div>
@@ -479,8 +479,8 @@
       </div>
       <div class="input-group">
        <input type="text" class="solution-input puzzle-input" placeholder="Enter number of eggs" data-answer="2" autocomplete="off">
-       <button class="submit-button submit-btn" onclick="checkAnswer(4)">Submit Answer</button>
-       <button class="hint-btn" onclick="toggleHint(4)">Show Hint</button>
+       <button class="submit-button submit-btn" data-puzzle-num="4">Submit Answer</button>
+       <button class="hint-btn" data-hint-id="4">Show Hint</button>
        <div class="hint-text" id="hint4">24 × 1/6 = 4 cups flour → 2 sugar → (2÷3)×2 = about 1.3 → round to 2 eggs.</div>
        <div class="feedback" id="feedback4"></div>
       </div>
@@ -502,8 +502,8 @@
       </div>
       <div class="input-group">
        <input type="text" class="solution-input puzzle-input" placeholder="Enter total (X + Y)" data-answer="10" autocomplete="off">
-       <button class="submit-button submit-btn" onclick="checkAnswer(5)">Submit Answer</button>
-       <button class="hint-btn" onclick="toggleHint(5)">Show Hint</button>
+       <button class="submit-button submit-btn" data-puzzle-num="5">Submit Answer</button>
+       <button class="hint-btn" data-hint-id="5">Show Hint</button>
        <div class="hint-text" id="hint5">After step 4: (2,3). You need to reach (7,8), so Y=5 and X=5 → total 10.</div>
        <div class="feedback" id="feedback5"></div>
       </div>
@@ -521,8 +521,8 @@
       </div>
       <div class="input-group">
        <input type="text" class="solution-input puzzle-input" id="finalAnswer" placeholder="Click letters above to spell the name" readonly data-answer="GRINCH">
-       <button class="submit-button submit-btn" onclick="checkFinalAnswer()">Solve Mystery</button>
-       <button class="hint-btn" onclick="toggleHint('final')">Show Hint</button>
+       <button class="submit-button submit-btn" id="finalSubmitBtn">Solve Mystery</button>
+       <button class="hint-btn" data-hint-id="final">Show Hint</button>
        <div class="hint-text" id="hintfinal">Look at the cipher key above — it contains all the clues you need. The thief's name is 6 letters long and is a famous Christmas character!</div>
        <div class="feedback" id="feedbackfinal"></div>
       </div>
@@ -535,7 +535,7 @@
     <div class="victory-content">
      <h2 class="victory-title">🎉 Mystery Solved! 🎉</h2>
      <p class="victory-message" id="victoryMessage">You discovered that the Grinch stole Santa's star — and Christmas is saved! 🌟</p>
-     <button class="submit-button play-again-btn" onclick="resetGame()">Play Again</button>
+     <button class="submit-button play-again-btn" id="resetGameBtn">Play Again</button>
     </div>
    </div>
 
@@ -588,35 +588,65 @@
         }
 
         function checkAnswer(num) {
-            const card = document.querySelector(`[data-puzzle="${num}"]`);
-            const input = card.querySelector('.puzzle-input');
-            const feedback = document.getElementById(`feedback${num}`);
-            const answer = input.dataset.answer.toUpperCase();
-            const user = input.value.toUpperCase().trim();
-
-            if (user === answer) {
-                feedback.textContent = '✅ Correct! Well done!';
-                feedback.className = 'feedback correct';
-                card.classList.add('solved');
-                card.querySelector('.status-indicator').classList.add('solved');
-                solvedPuzzles.add(num);
-                input.disabled = true;
-                card.querySelector('.submit-btn').disabled = true;
-                updateProgress();
-                createSuccessAnimation();
-
-                if (solvedPuzzles.size === 5) {
-                    setTimeout(() => {
-                        const finalPuzzle = document.querySelector('.final-puzzle');
-                        finalPuzzle.classList.add('active');
-                        finalPuzzle.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 1000);
+            try {
+                const card = document.querySelector(`[data-puzzle="${num}"]`);
+                if (!card) {
+                    console.error('Puzzle card not found for puzzle', num);
+                    return;
                 }
-            } else {
-                feedback.textContent = '❌ Not quite right. Try again!';
-                feedback.className = 'feedback incorrect';
-                card.style.animation = 'shake 0.5s';
-                setTimeout(() => { card.style.animation = ''; }, 500);
+                
+                const input = card.querySelector('.puzzle-input');
+                if (!input) {
+                    console.error('Input not found for puzzle', num);
+                    return;
+                }
+                
+                const feedback = document.getElementById(`feedback${num}`);
+                if (!feedback) {
+                    console.error('Feedback element not found for puzzle', num);
+                    return;
+                }
+                
+                const answer = input.dataset.answer ? input.dataset.answer.toUpperCase() : '';
+                const user = input.value ? input.value.toUpperCase().trim() : '';
+
+                if (!answer) {
+                    console.error('Answer not found in data-answer attribute for puzzle', num);
+                    feedback.textContent = '❌ Error: Answer not configured';
+                    feedback.className = 'feedback incorrect';
+                    return;
+                }
+
+                if (user === answer) {
+                    feedback.textContent = '✅ Correct! Well done!';
+                    feedback.className = 'feedback correct show';
+                    card.classList.add('solved');
+                    const indicator = card.querySelector('.status-indicator');
+                    if (indicator) indicator.classList.add('solved');
+                    solvedPuzzles.add(num);
+                    input.disabled = true;
+                    const submitBtn = card.querySelector('.submit-btn');
+                    if (submitBtn) submitBtn.disabled = true;
+                    updateProgress();
+                    createSuccessAnimation();
+
+                    if (solvedPuzzles.size === 5) {
+                        setTimeout(() => {
+                            const finalPuzzle = document.querySelector('.final-puzzle');
+                            if (finalPuzzle) {
+                                finalPuzzle.classList.add('active');
+                                finalPuzzle.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }, 1000);
+                    }
+                } else {
+                    feedback.textContent = '❌ Not quite right. Try again!';
+                    feedback.className = 'feedback incorrect show';
+                    card.style.animation = 'shake 0.5s';
+                    setTimeout(() => { card.style.animation = ''; }, 500);
+                }
+            } catch (error) {
+                console.error('Error in checkAnswer:', error);
             }
         }
 
@@ -628,14 +658,14 @@
 
             if (user === answer) {
                 feedback.textContent = '🎉 Correct! You solved the mystery!';
-                feedback.className = 'feedback correct';
+                feedback.className = 'feedback correct show';
                 setTimeout(() => {
                     document.getElementById('victoryModal').classList.add('visible');
                     createSuccessAnimation();
                 }, 1000);
             } else {
-                feedback.textContent = '❌ That's not the thief. Try again!';
-                feedback.className = 'feedback incorrect';
+                feedback.textContent = '❌ That\'s not the thief. Try again!';
+                feedback.className = 'feedback incorrect show';
                 setTimeout(() => {
                     clearSelection();
                 }, 2000);
@@ -648,15 +678,28 @@
         }
 
         function toggleHint(id) {
-            const hint = document.getElementById(`hint${id}`);
-            const button = event.target;
-            
-            if (hint.classList.contains('visible')) {
-                hint.classList.remove('visible');
-                button.textContent = 'Show Hint';
-            } else {
-                hint.classList.add('visible');
-                button.textContent = 'Hide Hint';
+            try {
+                const hint = document.getElementById(`hint${id}`);
+                if (!hint) {
+                    console.error('Hint element not found for puzzle', id);
+                    return;
+                }
+                
+                // Find the button - it's in the same input-group as the hint
+                const inputGroup = hint.closest('.input-group');
+                const button = inputGroup ? inputGroup.querySelector('.hint-btn') : null;
+                
+                if (hint.classList.contains('visible')) {
+                    hint.classList.remove('visible');
+                    hint.style.display = 'none';
+                    if (button) button.textContent = 'Show Hint';
+                } else {
+                    hint.classList.add('visible');
+                    hint.style.display = 'block';
+                    if (button) button.textContent = 'Hide Hint';
+                }
+            } catch (error) {
+                console.error('Error in toggleHint:', error);
             }
         }
 
@@ -720,8 +763,67 @@
             }
         }
 
-        // Initialize the game
-        document.addEventListener('DOMContentLoaded', initializeGame);
+        // Make functions globally accessible immediately
+        window.checkAnswer = checkAnswer;
+        window.toggleHint = toggleHint;
+        window.checkFinalAnswer = checkFinalAnswer;
+        window.resetGame = resetGame;
+
+        // Initialize the game and attach event listeners
+        function attachEventListeners() {
+            // Attach event listeners to submit buttons
+            document.querySelectorAll('.submit-btn[data-puzzle-num]').forEach((btn) => {
+                const num = parseInt(btn.getAttribute('data-puzzle-num'));
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    checkAnswer(num);
+                });
+            });
+            
+            // Attach event listener to final submit button
+            const finalSubmitBtn = document.getElementById('finalSubmitBtn');
+            if (finalSubmitBtn) {
+                finalSubmitBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    checkFinalAnswer();
+                });
+            }
+            
+            // Attach event listeners to hint buttons
+            document.querySelectorAll('.hint-btn[data-hint-id]').forEach((btn) => {
+                const idAttr = btn.getAttribute('data-hint-id');
+                const id = idAttr === 'final' ? 'final' : parseInt(idAttr);
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleHint(id);
+                });
+            });
+            
+            // Attach event listener to reset button
+            const resetBtn = document.getElementById('resetGameBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    resetGame();
+                });
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                initializeGame();
+                attachEventListeners();
+            });
+        } else {
+            // DOM is already loaded
+            initializeGame();
+            attachEventListeners();
+        }
     </script>
  </body>
 </html>
