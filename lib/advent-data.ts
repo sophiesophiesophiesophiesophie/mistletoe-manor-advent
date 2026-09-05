@@ -817,8 +817,8 @@ export function isDayUnlocked(day: number, unlockAllOverride = false): boolean {
   // Get current time in UTC
   const now = new Date()
 
-  // Create unlock date for this door: 2025-12-{day} 06:00:00 UTC
-  const unlockDate = new Date(Date.UTC(2025, 11, day, 6, 0, 0)) // Month is 0-indexed, so 11 = December
+  // Create unlock date for this door: 2026-12-{day} 06:00:00 UTC
+  const unlockDate = new Date(Date.UTC(2026, 11, day, 6, 0, 0)) // Month is 0-indexed, so 11 = December
 
   // Door is unlocked if current UTC time >= unlock time
   return now >= unlockDate
@@ -828,8 +828,8 @@ export function getTimeUntilUnlock(day: number): { days: number; hours: number; 
   // Get current time in UTC
   const now = new Date()
 
-  // Create unlock date for this door: 2025-12-{day} 06:00:00 UTC
-  const unlockDate = new Date(Date.UTC(2025, 11, day, 6, 0, 0))
+  // Create unlock date for this door: 2026-12-{day} 06:00:00 UTC
+  const unlockDate = new Date(Date.UTC(2026, 11, day, 6, 0, 0))
 
   // If already unlocked, return null
   if (now >= unlockDate) {
